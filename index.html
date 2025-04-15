@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3 Todo List</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/current/metro.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.7/underscore-umd-min.js"></script>
+</head>
+
+<body>
+    <!-- navbar -->
+    <ul class="h-menu">
+        <li><a href=".">Home</a></li>
+
+        <li><a href="#">About</a></li>
+    </ul>
+    <!-- navbar -->
+    <br>
+    <div id="app" class="container">
+
+        <div class="card">
+            <div class="card-header">
+                Todo List App {{developer}}
+            </div>
+            <div class="card-content p-2">
+                <input @keyup.enter="save" v-model="todo" ref="todo" type="text" data-role="input" placeholder="Todo">
+                <br>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Todo</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="data in todo_list" :key="data.id">
+                            <td>{{data.todo}}</td>
+                            <td>
+                                <button @click="deleteData(data.id)" class="button alert" type="button">x</button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                Copyright@2025-Deratek
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.metroui.org.ua/current/metro.js"></script>
+
+    <script>
+        function randomString(l) {
+            l = (l === undefined) ? l = 10 : l;
+            var r = '', c = '1234567890';
+            for (var i = 0; i < l; i++) { r += c.charAt(Math.floor(Math.random() * c.length)) }
+            return r
+        }
+
+        const app = Vue.createApp({
+            data() {
+                return {
+                    todo_list: [],
+                    todo: null,
+                    developer: 'Lamhot Simamora'
+                }
+            },
+            methods: {
+                deleteData(id) {
+                    var tmp = []
+
+                    var todo_list = this.todo_list
+                    todo_list.forEach(e => {
+                        if (e['id'] === id) {
+
+                        } else {
+                            tmp.push({
+                                'id': e['id'],
+                                'todo': e['todo']
+                            })
+                        }
+                    });
+                    this.todo_list = tmp
+                },
+                save() {
+                    if (this.todo == null) {
+                        this.$refs.todo.focus();
+                        return;
+                    }
+                    this.todo_list.push({
+                        'id': randomString(),
+                        'todo': this.todo
+                    })
+                    this.todo = null
+                }
+            },
+            mounted() {
+                setTimeout(() => {
+                    if (window.Metro && Metro.init) {
+                        Metro.init(); // atau panggil inisialisasi table jika ada
+                    }
+                }, 0);
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
